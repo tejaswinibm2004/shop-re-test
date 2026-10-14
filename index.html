@@ -45,6 +45,7 @@
   if (window.BUGSHIELD_CONFIG && window.BUGSHIELD_CONFIG.host) {
     var s = document.createElement('script');
     s.src = window.BUGSHIELD_CONFIG.host.replace(/\/$/, '') + '/sdk/bugshield.js';
+    s.setAttribute('data-endpoint', window.BUGSHIELD_CONFIG.host);
     s.setAttribute('data-app-id', window.BUGSHIELD_CONFIG.appId);
     s.setAttribute('data-key', window.BUGSHIELD_CONFIG.key);
     document.body.appendChild(s);
