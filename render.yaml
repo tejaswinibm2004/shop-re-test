@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: quickbyte-demo-shop
+    runtime: static
+    buildCommand: node scripts/build.mjs
+    staticPublishPath: ./
+    envVars:
+      - key: BUGSHIELD_HOST
+        sync: false
+      - key: BUGSHIELD_APP_ID
+        sync: false
+      - key: BUGSHIELD_INGESTION_KEY
+        sync: false

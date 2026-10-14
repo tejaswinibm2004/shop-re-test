@@ -1,0 +1,5 @@
+# generated at build/deploy time (contains the ingestion key) — never commit
+config.js
+version.json
+
+PLANTED_BUGS.md
