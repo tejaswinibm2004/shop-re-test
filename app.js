@@ -3,7 +3,7 @@ export const PRODUCTS = [
   { id: 'p1', name: 'Wireless Headphones Pro', price: 49.99, rating: 4.5, img: '/images/p1.svg', desc: 'Noise-cancelling over-ear headphones, 40h battery', cat: 'Electronics' },
   { id: 'p2', name: 'Organic Basmati Rice 5kg', price: 12.49, rating: 4.0, img: '/images/p2.svg', desc: 'Long-grain aged basmati rice bag', cat: 'Grocery' },
   { id: 'p3', name: 'Stainless Steel Bottle 1L', price: 9.99, rating: 3.5, img: '/images/p3.svg', desc: 'Vacuum insulated steel flask', cat: 'Home' },
-  { id: 'p4', name: 'Smart LED Bulb (4-pack)', price: 18.0, rating: 4.5, img: '/images/missing.png', desc: 'Wifi multicolor bulbs that never disconnect', cat: 'Electronics' },
+  { id: 'p4', name: 'Smart LED Bulb (4-pack)', price: 18.0, rating: 4.5, img: '/images/p4.svg', desc: 'Wifi multicolor bulbs that never disconnect', cat: 'Electronics' },
   { id: 'p5', name: 'Cotton T-Shirt Large', price: 7.5, rating: 4.0, img: '/images/p5.svg', desc: 'Plain crew neck tee, pack of 1', cat: 'Fashion' },
   { id: 'p6', name: 'USB-C Fast Charger 65W', price: 24.95, rating: 4.5, img: '/images/p6.svg', desc: 'GaN wall charger for laptops', cat: 'Electronics' },
   { id: 'p7', name: 'Non-stick Frying Pan 28cm', price: 21.25, rating: 3.0, img: '/images/p7.svg', desc: 'Induction friendly pan with lid', cat: 'Home' },
