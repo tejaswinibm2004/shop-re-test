@@ -12,7 +12,7 @@ var cart = [];
 
 // BUG 6 (money — must require human approval): string concat instead of numeric add.
 function cartTotal(a, b) {
-  return a + b;
+  return Number(a) + Number(b);
 }
 
 function fmt(n) {
