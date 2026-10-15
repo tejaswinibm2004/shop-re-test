@@ -24,7 +24,7 @@ function renderProducts() {
   grid.innerHTML = PRODUCTS.map(function (p) {
     return '<div class="card"><img src="' + p.img + '"><h3>' + p.name + '</h3>' +
       '<div class="price">' + fmt(p.price) + '</div>' +
-      '<button data-add="' + p.id + '">Add to Card</button></div>';
+      '<button data-add="' + p.id + '">Add to Cart</button></div>';
   }).join('');
   grid.querySelectorAll('[data-add]').forEach(function (btn) {
     btn.addEventListener('click', function () {
