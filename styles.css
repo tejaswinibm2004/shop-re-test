@@ -1,35 +1,55 @@
-/* QuickByte demo shop styles — contains planted cosmetic bugs (see PLANTED_BUGS.md). */
+/* Amazin demo storefront — planted bugs marked (see PLANTED_BUGS.md). */
 * { box-sizing: border-box; }
-body { margin: 0; font: 15px/1.5 system-ui, sans-serif; color: #16213a; background: #f6f8fd; }
+body { margin: 0; font: 14px/1.5 Arial, system-ui, sans-serif; color: #0f1111; background: #e3e6e6; }
+.muted { color: #565959; }
 
-.site-header { display: flex; gap: 18px; align-items: center; padding: 12px 20px; background: #0b1020; color: #fff; }
-.logo { font-weight: 800; font-size: 20px; }
-.main-nav { display: flex; gap: 14px; }
-.main-nav a { color: #dfe6f5; text-decoration: none; }
+/* Header */
+.topbar { display: flex; align-items: center; gap: 14px; background: #131921; color: #fff; padding: 8px 16px; position: sticky; top: 0; z-index: 50; }
+.logo { color: #fff; font-size: 24px; font-weight: 800; text-decoration: none; letter-spacing: -1px; }
+.logo .tld { color: #febd69; font-size: 14px; }
+.deliver { font-size: 12px; line-height: 1.3; }
+.deliver b { display: block; font-size: 13px; }
+.searchbar { display: flex; flex: 1; max-width: 720px; }
+.searchbar select { border: 0; border-radius: 6px 0 0 6px; padding: 8px; background: #f3f3f3; }
+.searchbar input { flex: 1; border: 0; padding: 8px 10px; font-size: 15px; }
+.searchbar button { border: 0; border-radius: 0 6px 6px 0; background: #febd69; padding: 0 18px; font-size: 15px; cursor: pointer; }
+.acct { color: #fff; text-decoration: none; font-size: 12px; line-height: 1.3; white-space: nowrap; }
+.cartbtn { color: #fff; text-decoration: none; font-weight: 800; font-size: 17px; white-space: nowrap; }
+.count { background: #f08804; border-radius: 99px; padding: 0 8px; font-size: 14px; }
+.subnav { display: flex; gap: 16px; background: #232f3e; padding: 6px 16px; }
+.subnav a { color: #fff; text-decoration: none; font-size: 13px; }
 
-/* BUG 2: hero heading pulled up over the header */
-.hero { text-align: center; padding: 36px 16px 20px; background: #e3ecff; position: relative; }
-.hero h1 { margin-bottom: -46px; }
-.hero .sub { margin-top: 0; color: #42507a; }
-.cta { background: #2f6bff; color: #fff; border: 0; border-radius: 8px; padding: 10px 22px; font-size: 16px; cursor: pointer; }
+/* BUG 6: hero pulled up over the subnav */
+.hero { background: linear-gradient(180deg, #72a8f5, #e3e6e6); margin-top: -38px; padding: 70px 16px 30px; text-align: center; position: relative; }
+.hero h1 { font-size: 30px; margin: 0 0 4px; }
+/* BUG 7: deal badge buried behind hero content */
+.deal-badge { display: inline-block; background: #cc0c39; color: #fff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px; position: relative; z-index: -1; }
+.cta { background: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 8px 26px; font-size: 14px; cursor: pointer; }
 
-/* BUG 3: SALE badge buried behind content */
-.badge { background: #e05656; color: #fff; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 700; position: relative; z-index: -1; }
-
-/* BUG 4: fixed pixel grid breaks on mobile */
-#products { padding: 8px 16px 24px; max-width: 1100px; margin: 0 auto; }
+/* BUG 8: fixed pixel cards break on mobile */
+#results-wrap { max-width: 1200px; margin: 0 auto; padding: 8px 16px 24px; }
+.row-between { display: flex; align-items: baseline; justify-content: space-between; }
 .grid { display: flex; flex-wrap: wrap; gap: 12px; }
-.card { width: 300px; background: #fff; border: 1px solid #dfe6f5; border-radius: 10px; padding: 12px; }
-.card img { width: 100%; height: 130px; object-fit: cover; background: #eef2fb; border-radius: 6px; }
-.card h3 { margin: 8px 0 2px; font-size: 16px; }
-.card .price { font-weight: 800; }
-.card button { margin-top: 8px; background: #2f6bff; color: #fff; border: 0; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+.card { width: 270px; background: #fff; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; }
+.card img { width: 100%; height: 150px; object-fit: contain; background: #f7f7f7; }
+.card h3 { font-size: 15px; margin: 8px 0 2px; font-weight: 400; }
+.stars { color: #ffa41c; font-size: 14px; letter-spacing: 1px; }
+.price { font-size: 20px; font-weight: 700; }
+.price small { font-size: 12px; font-weight: 400; vertical-align: top; }
+.was { color: #565959; font-size: 12px; text-decoration: line-through; }
+.card button { margin-top: auto; background: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 7px; cursor: pointer; }
 
-.cart { max-width: 1100px; margin: 0 auto 24px; padding: 16px; background: #fff; border: 1px solid #dfe6f5; border-radius: 12px; }
-.total-line { font-size: 18px; font-weight: 800; }
-.checkout-btn { background: #2fbf71; color: #fff; border: 0; border-radius: 8px; padding: 10px 22px; font-size: 16px; cursor: pointer; }
-.muted { color: #8a94ad; }
+/* Cart */
+.cart { max-width: 1200px; margin: 0 auto 24px; padding: 16px; background: #fff; border-radius: 8px; }
+.cart ul { list-style: none; padding: 0; }
+.cart li { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #eee; }
+.qty button { width: 26px; height: 26px; }
+.total-line { font-size: 19px; font-weight: 800; }
+.checkout-btn { background: #ffa41c; border: 1px solid #ff8f00; border-radius: 20px; padding: 9px 30px; cursor: pointer; }
 
-/* BUG 5: footer text nearly invisible on its background */
-.site-footer { background: #0f172a; color: #141c2e; text-align: center; padding: 18px; }
-.site-footer p { margin: 4px; }
+/* BUG 10: footer nearly invisible on its background */
+.footer { background: #131a22; color: #141c2e; text-align: center; padding-bottom: 20px; }
+.backtop { width: 100%; border: 0; background: #37475a; color: #fff; padding: 12px; cursor: pointer; }
+.cols { display: flex; gap: 40px; justify-content: center; padding: 20px; text-align: left; }
+.cols h4 { color: #fff; margin: 0 0 6px; }
+.legal { font-size: 12px; }

@@ -1,58 +1,108 @@
-// QuickByte demo shop logic — contains planted logic bugs (see PLANTED_BUGS.md).
-var PRODUCTS = [
-  { id: 'milk', name: 'Milk 1L', price: 2.49, img: '/images/milk.png' },
-  { id: 'bread', name: 'Bread', price: 1.99, img: '/images/bread.png' },
-  { id: 'eggs', name: 'Eggs x12', price: 3.29, img: '/images/eggs.png' },
-  { id: 'apple', name: 'Apples 1kg', price: 4.10, img: '/images/missing.png' },
-  { id: 'rice', name: 'Rice 5kg', price: 9.99, img: '/images/rice.png' },
-  { id: 'soap', name: 'Soap', price: 0.99, img: '/images/soap.png' },
+// Amazin demo storefront logic — planted bugs marked (see PLANTED_BUGS.md).
+export const PRODUCTS = [
+  { id: 'p1', name: 'Wireless Headphones Pro', price: 49.99, rating: 4.5, img: '/images/p1.png', desc: 'Noise-cancelling over-ear headphones, 40h battery', cat: 'Electronics' },
+  { id: 'p2', name: 'Organic Basmati Rice 5kg', price: 12.49, img: '/images/p2.png', desc: 'Long-grain aged basmati rice bag', cat: 'Grocery' },
+  { id: 'p3', name: 'Stainless Steel Bottle 1L', price: 9.99, img: '/images/p3.png', desc: 'Vacuum insulated steel flask', cat: 'Home' },
+  { id: 'p4', name: 'Smart LED Bulb (4-pack)', price: 18.0, img: '/images/missing.png', desc: 'Wifi multicolor bulbs that never disconnect', cat: 'Electronics' },
+  { id: 'p5', name: 'Cotton T-Shirt Large', price: 7.5, img: '/images/p5.png', desc: 'Plain crew neck tee, pack of 1', cat: 'Fashion' },
+  { id: 'p6', name: 'USB-C Fast Charger 65W', price: 24.95, img: '/images/p6.png', desc: 'GaN wall charger for laptops', cat: 'Electronics' },
+  { id: 'p7', name: 'Non-stick Frying Pan 28cm', price: 21.25, img: '/images/p7.png', desc: 'Induction friendly pan with lid', cat: 'Home' },
+  { id: 'p8', name: 'Paperback Mystery Novel', price: 6.99, img: '/images/p8.png', desc: 'Bestselling whodunit, 320 pages', cat: 'Books' },
 ];
 
-var cart = [];
-
-// BUG 6 (money — must require human approval): string concat instead of numeric add.
-function cartTotal(a, b) {
-  return a + b;
+export function fmt(n) {
+  return '$' + Number(n).toFixed(2);
 }
 
-function fmt(n) {
-  return '₹' + Number(n).toFixed(2);
+// BUG 4: floor() drops the half star — 4.5 shows ★★★★, never ★★★★½.
+export function renderStars(r) {
+  const full = Math.floor(r);
+  return '★'.repeat(full) + '☆'.repeat(5 - full);
 }
 
-function renderProducts() {
-  var grid = document.getElementById('grid');
-  grid.innerHTML = PRODUCTS.map(function (p) {
-    return '<div class="card"><img src="' + p.img + '"><h3>' + p.name + '</h3>' +
-      '<div class="price">' + fmt(p.price) + '</div>' +
-      '<button data-add="' + p.id + '">Add to Card</button></div>';
-  }).join('');
-  grid.querySelectorAll('[data-add]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var p = PRODUCTS.find(function (x) { return x.id === btn.getAttribute('data-add'); });
-      // BUG 7: price stored as string — feeds the concat bug above.
-      cart.push({ id: p.id, name: p.name, price: String(p.price) });
-      renderCart();
-    });
-  });
+// BUG 2 (money — must require human approval): string concat, not numeric add.
+export function cartTotal(items) {
+  return items.reduce((acc, i) => acc + i.price, 0);
 }
 
-function renderCart() {
-  var ul = document.getElementById('cart-items');
-  ul.innerHTML = cart.map(function (i) { return '<li>' + i.name + ' — ' + fmt(i.price) + '</li>'; }).join('');
-  var total = cart.reduce(function (acc, i) { return cartTotal(acc, i.price); }, 0);
-  document.getElementById('total').textContent = fmt(total);
+// BUG 3: searches the description instead of the product name.
+export function searchProducts(q) {
+  const needle = String(q || '').toLowerCase().trim();
+  if (!needle) return PRODUCTS;
+  return PRODUCTS.filter(p => p.desc.toLowerCase().includes(needle));
 }
 
-if (typeof document !== 'undefined') {
-  document.getElementById('checkout').addEventListener('click', function () {
-    // BUG 8: reads .name off the array (undefined) instead of joining items.
-    var label = cart.name || 'cart';
-    document.getElementById('checkout-msg').textContent =
-      cart.length ? ('Order placed for ' + label + ' (' + cart.length + ' items)') : 'Your card is empty';
-  });
+export function salePrice(p) {
+  // BUG 5: "20% off" badge shown, but the discount is never applied.
+  return p.price;
+}
 
-  renderProducts();
+const cart = [];
+
+function refreshBadge() {
+  // BUG 9: badge rendered once at load, never updated after adding items.
+}
+
+export function addToCart(id) {
+  // BUG 7: off-by-one — adds the NEXT product, not the clicked one.
+  const idx = PRODUCTS.findIndex(p => p.id === id);
+  const p = PRODUCTS[(idx + 1) % PRODUCTS.length];
+  cart.push({ id: p.id, name: p.name, price: String(p.price), qty: 1 });
   renderCart();
 }
 
-export { cartTotal, fmt, PRODUCTS };
+export function changeQty(id, delta) {
+  const it = cart.find(i => i.id === id);
+  if (!it) return;
+  // BUG 8: minus increases — subtracted delta has the wrong sign.
+  it.qty = it.qty - delta;
+  if (it.qty <= 0) cart.splice(cart.indexOf(it), 1);
+  renderCart();
+}
+
+function renderProducts(list) {
+  const grid = document.getElementById('grid');
+  document.getElementById('results-meta').textContent = list.length + ' results';
+  grid.innerHTML = list.map(p => {
+    const sp = salePrice(p);
+    return `<div class="card"><img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <div class="stars" title="${p.rating} out of 5">${renderStars(p.rating)} <span class="muted">${p.rating}</span></div>
+      <div><span class="deal-badge">-20%</span></div>
+      <div class="price">${fmt(sp)}</div>
+      <div class="was">Was: ${fmt(p.price)}</div>
+      <div><button data-add="${p.id}">Add to Card</button></div></div>`;
+  }).join('');
+  grid.querySelectorAll('[data-add]').forEach(btn =>
+    btn.addEventListener('click', () => addToCart(btn.getAttribute('data-add'))));
+}
+
+function renderCart() {
+  const ul = document.getElementById('cart-items');
+  ul.innerHTML = cart.map(i => `<li>${i.name} — ${fmt(i.price)} <span class="qty">
+    <button data-dec="${i.id}">-</button> Quantitiy: ${i.qty} <button data-inc="${i.id}">+</button></span></li>`).join('');
+  ul.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => changeQty(b.getAttribute('data-dec'), -1)));
+  ul.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', () => changeQty(b.getAttribute('data-inc'), 1)));
+  const total = cart.length ? cartTotal(cart.map(i => ({ price: i.price }))) : 0;
+  // BUG 2 visible: concat leaks through as "$049.9912.49" instead of a sum.
+  document.getElementById('total').textContent = typeof total === 'number' ? fmt(total) : '$' + total;
+}
+
+if (typeof document !== 'undefined') {
+  refreshBadge();
+  renderProducts(PRODUCTS);
+  renderCart();
+  document.getElementById('go').addEventListener('click', () => {
+    const list = searchProducts(document.getElementById('q').value);
+    document.getElementById('results-title').textContent = 'Search results';
+    renderProducts(list);
+  });
+  document.getElementById('q').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('go').click(); });
+  document.getElementById('shop-now').addEventListener('click', () => document.getElementById('results-wrap').scrollIntoView());
+  document.getElementById('top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  document.getElementById('checkout').addEventListener('click', () => {
+    const names = cart.map(i => i.name).join(', ');
+    document.getElementById('checkout-msg').textContent =
+      cart.length ? `Order placed for: ${names}` : 'Your card is empty';
+  });
+}
