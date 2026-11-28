@@ -71,7 +71,7 @@ function renderProducts(list) {
       <div><span class="deal-badge">-20%</span></div>
       <div class="price">${fmt(sp)}</div>
       <div class="was">Was: ${fmt(p.price)}</div>
-      <div><button data-add="${p.id}">Add to Cart</button></div></div>`;
+      <div><button data-add="${p.id}">Add to Card</button></div></div>`;
   }).join('');
   grid.querySelectorAll('[data-add]').forEach(btn =>
     btn.addEventListener('click', () => addToCart(btn.getAttribute('data-add'))));
